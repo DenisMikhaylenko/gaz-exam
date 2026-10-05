@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "publishedAt": "2026-10-05T10:45:38.501Z",
+  "publishedAt": "2026-10-05T10:56:08.223Z",
   "app": {
-    "version": "0.7.4",
+    "version": "0.7.5",
     "notes": "Что изменилось в этой версии:\n\n• Добавлены варианты ответов для всех экзаменационных билетов.\n• Исправлена прокрутка главного экрана на телефоне.\n• Обновлён дизайн главного экрана.",
-    "apkUrl": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/app/GazEnergo-exam.apk?v=f141039e7339c3be",
-    "sha256": "f141039e7339c3be745ecf6dc0ad2ba2f0b72dba93891a8aa91ab19b5a74422c"
+    "apkUrl": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/app/GazEnergo-exam.apk?v=f58149030baa6908",
+    "sha256": "f58149030baa69085be8c1485ec7d4af05b734abce09db534c36a03ab9bea4cd"
   },
   "content": {
     "version": "df4a0c434925d3fd",
