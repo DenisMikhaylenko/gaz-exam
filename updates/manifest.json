@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "publishedAt": "2026-10-05T10:03:14.748Z",
+  "publishedAt": "2026-10-05T10:36:57.479Z",
   "app": {
-    "version": "0.7.3",
+    "version": "0.7.4",
     "notes": "Что изменилось в этой версии",
-    "apkUrl": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/app/GazEnergo-exam.apk?v=37ce9589f70b327d",
-    "sha256": "37ce9589f70b327db97708f68af2c572177d49357fe508309c433f37741a5958"
+    "apkUrl": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/app/GazEnergo-exam.apk?v=f141039e7339c3be",
+    "sha256": "f141039e7339c3be745ecf6dc0ad2ba2f0b72dba93891a8aa91ab19b5a74422c"
   },
   "content": {
     "version": "df4a0c434925d3fd",
