@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "publishedAt": "2026-10-05T06:33:08.137Z",
+  "app": {
+    "version": "0.7.2",
+    "notes": "Тест обновления: тёмная тема",
+    "apkUrl": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/app/GazEnergo-exam.apk?v=d10ba18e60698dd4",
+    "sha256": "d10ba18e60698dd41d641372cb73f2f077e8c7b7eb29c9ac08b94af2c4938be8"
+  },
+  "content": {
+    "version": "df4a0c434925d3fd",
+    "tickets": {
+      "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/data/tickets.json?v=d78fcef70653b2e9",
+      "sha256": "d78fcef70653b2e997f957378d57d135f7cec2d299875706d90d32d09d6c090d"
+    },
+    "instructions": {
+      "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/data/instructions.json?v=b65256facc31b061",
+      "sha256": "b65256facc31b061694d0827abca47103a447d21ba6511e973f1fb97ff920160"
+    },
+    "documents": [
+      {
+        "id": "instruction-01",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-01.pdf?v=7772bccddbe70511",
+        "sha256": "7772bccddbe705115754d5008043fe36a5a3329257553b738d6d4e979d86db94",
+        "bytes": 11712744
+      },
+      {
+        "id": "instruction-02",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-02.pdf?v=b4b7c91cff5442b7",
+        "sha256": "b4b7c91cff5442b7f92b76ebd532af56316ee5013e4fa044b8fc5f5dab605fc8",
+        "bytes": 20648660
+      },
+      {
+        "id": "instruction-03",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-03.pdf?v=8a45d8d1e411d5ad",
+        "sha256": "8a45d8d1e411d5ad4a1cede4f4abec76c7e8a07ccba5a8f61a8ecd32a716d45f",
+        "bytes": 7861850
+      },
+      {
+        "id": "instruction-04",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-04.pdf?v=63be4176f042bb3b",
+        "sha256": "63be4176f042bb3b272045cfdf97fcb38e0629bc1de33f2e17a10cee84be394b",
+        "bytes": 8257692
+      },
+      {
+        "id": "instruction-05",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-05.pdf?v=b28ee74a665bf922",
+        "sha256": "b28ee74a665bf9221b91797d9c5a60756c4da35c506540b65324c1d8b1df9786",
+        "bytes": 8544036
+      },
+      {
+        "id": "instruction-06",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-06.pdf?v=2e2e5785c7674928",
+        "sha256": "2e2e5785c767492826133f30f6080239a987d371f1ec54c7997271916cb9cd5f",
+        "bytes": 7167317
+      },
+      {
+        "id": "instruction-07",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-07.pdf?v=954985aa581ede39",
+        "sha256": "954985aa581ede398cde7a15a43dc000f744f2ffd1b22bc346885d2614556113",
+        "bytes": 9546736
+      },
+      {
+        "id": "instruction-08",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-08.pdf?v=d6ac5fe900da75a5",
+        "sha256": "d6ac5fe900da75a5fa31e8180beb0d7e3afc7ca5b166dc27c8bb6bf5d73afe9b",
+        "bytes": 10981148
+      },
+      {
+        "id": "instruction-09",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-09.pdf?v=000190a453c075bb",
+        "sha256": "000190a453c075bb709b32b64d9f0238df1700dc3475391bc1d9fec436d66153",
+        "bytes": 968857
+      },
+      {
+        "id": "instruction-10",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-10.pdf?v=a10bc8d2c1217812",
+        "sha256": "a10bc8d2c12178128220c3431bbe9b438c1c79e887d9b476f2645808d0c59bab",
+        "bytes": 45988305
+      },
+      {
+        "id": "instruction-11",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-11.pdf?v=213c17da9d398f90",
+        "sha256": "213c17da9d398f90840f6e4bcf622fe16d218d3230742031a791e9c63cf8d9cc",
+        "bytes": 4707660
+      },
+      {
+        "id": "instruction-12",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-12.pdf?v=c616ad5c89f4fd13",
+        "sha256": "c616ad5c89f4fd13a54b00a01802d7d45c85f766552955de964c4047df41314b",
+        "bytes": 1013010
+      },
+      {
+        "id": "instruction-13",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-13.pdf?v=28555305e396e61d",
+        "sha256": "28555305e396e61dfd3f3bf6b37878904eefe0610008a741a558e000db7b102e",
+        "bytes": 42850530
+      },
+      {
+        "id": "instruction-14",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-14.pdf?v=c7bdaed4431d5af1",
+        "sha256": "c7bdaed4431d5af16d41918a236fd470843beff47b0af4ff81a1e40e0a926f10",
+        "bytes": 15550804
+      },
+      {
+        "id": "instruction-15",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-15.pdf?v=0ab21a403f91d607",
+        "sha256": "0ab21a403f91d607c22b255d1b93d21a7354235727358d40b236f8927e8ef365",
+        "bytes": 534785
+      },
+      {
+        "id": "instruction-16",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-16.pdf?v=4fc00c2de5c5881b",
+        "sha256": "4fc00c2de5c5881b7d170174c9cb456955e40bfbf4873ef2a5bd15c82bbe4dd6",
+        "bytes": 7897629
+      },
+      {
+        "id": "instruction-17",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/instruction-17.pdf?v=20e34b14348ea984",
+        "sha256": "20e34b14348ea984ef872fe92bfdf85b6fcf28885e17aadb8f68481ff7a58f98",
+        "bytes": 3226862
+      }
+    ]
+  }
+}
