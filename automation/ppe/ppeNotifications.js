@@ -75,6 +75,15 @@ function itemSubject(item) {
   return [name, identity, location].filter(Boolean).join(' · ')
 }
 
+function itemAlertAcknowledged(item) {
+  return Object.values(CONTROL_CONFIG).some((config) => {
+    const dueDate = String(item?.[config.dateField] || '')
+    return item?.[config.requiredField] === true
+      && Boolean(dueDate)
+      && item?.[config.acknowledgedField] === dueDate
+  })
+}
+
 function alertMessage(alert) {
   const { controlKind, days, subject } = alert
   const noun = CONTROL_CONFIG[controlKind].noun
@@ -97,10 +106,10 @@ export function collectPpeAlerts(items, today) {
     // Старые документы без department относятся к ОВБ-1. Документы других
     // подразделений никогда не должны попадать в рассылку ОВБ-1.
     if (item.department && item.department !== 'ovb1') continue
+    if (itemAlertAcknowledged(item)) continue
     for (const [controlKind, config] of Object.entries(CONTROL_CONFIG)) {
       if (item[config.requiredField] !== true) continue
       const dueDate = String(item[config.dateField] || '')
-      if (item[config.acknowledgedField] === dueDate && dueDate) continue
       const days = daysUntilDate(dueDate, today)
       const stage = days === null ? null : notificationStage(days)
       if (!stage) continue
@@ -132,13 +141,13 @@ export function collectPpeMenuAlertDueDates(items, department = 'ovb1') {
   for (const item of items) {
     if (!item || item.status === 'decommissioned') continue
     if ((item.department || 'ovb1') !== department) continue
+    if (itemAlertAcknowledged(item)) continue
 
     const itemDates = []
     for (const config of Object.values(CONTROL_CONFIG)) {
       if (item[config.requiredField] !== true) continue
       const dueDate = String(item[config.dateField] || '')
       if (dateNumber(dueDate) === null) continue
-      if (item[config.acknowledgedField] === dueDate) continue
       itemDates.push(dueDate)
     }
     itemDates.sort()
