@@ -1,0 +1,68 @@
+name: PPE notifications OVB-1
+
+on:
+  schedule:
+    - cron: '17 8 * * *'
+      timezone: 'Asia/Yekaterinburg'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Безопасный режим проверки или адресной отправки'
+        required: true
+        default: validate
+        type: choice
+        options:
+          - preview
+          - validate
+          - test
+          - scheduled
+      employee:
+        description: 'Сотрудник для validate/test'
+        required: false
+        default: emp-006
+        type: string
+      date:
+        description: 'Тестовая дата YYYY-MM-DD; пусто = сегодня'
+        required: false
+        type: string
+
+concurrency:
+  group: ppe-notifications-ovb1
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      PPE_MODE: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.mode }}
+      PPE_EMPLOYEE: ${{ inputs.employee || '' }}
+      PPE_DATE: ${{ inputs.date || '' }}
+    steps:
+      - name: Checkout public automation
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: automation/ppe/package.json
+
+      - name: Check Firebase secret
+        shell: bash
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "FIREBASE_SERVICE_ACCOUNT_JSON is not configured" >&2
+            exit 1
+          fi
+
+      - name: Install notification runtime
+        run: npm install --prefix automation/ppe --ignore-scripts --no-audit --no-fund
+
+      - name: Run PPE notification job
+        run: node automation/ppe/ppeNotificationsCli.js
