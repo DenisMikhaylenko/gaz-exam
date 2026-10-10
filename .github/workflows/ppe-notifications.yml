@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '17 8 * * *'
       timezone: 'Asia/Yekaterinburg'
+    - cron: '17 9 * * *'
+      timezone: 'Asia/Yekaterinburg'
   workflow_dispatch:
     inputs:
       mode:
@@ -44,10 +46,10 @@ jobs:
       PPE_DATE: ${{ inputs.date || '' }}
     steps:
       - name: Checkout public automation
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
