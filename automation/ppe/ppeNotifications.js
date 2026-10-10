@@ -48,9 +48,10 @@ export function dateKeyInTimeZone(now = new Date(), timeZone = 'Asia/Yekaterinbu
 }
 
 export function notificationStage(days) {
-  if (days === 14) return 'info'
-  if (days === 7) return 'warning'
-  if (days <= 3) return days < 0 ? 'overdue' : 'urgent'
+  if (days < 0) return 'overdue'
+  if (days <= 3) return 'urgent'
+  if (days <= 7) return 'warning'
+  if (days <= 14) return 'info'
   return null
 }
 
