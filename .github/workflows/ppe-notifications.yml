@@ -2,9 +2,9 @@ name: PPE notifications OVB-1
 
 on:
   schedule:
-    # Explicit UTC: 08:17–18:17 Asia/Yekaterinburg (UTC+5), hourly recovery.
+    # Explicit UTC: daily at 08:00 Asia/Yekaterinburg (UTC+5).
     # Firestore's daily marker suppresses delivery after a successful attempt.
-    - cron: '17 3-13 * * *'
+    - cron: '0 3 * * *'
   workflow_dispatch:
     inputs:
       mode:
