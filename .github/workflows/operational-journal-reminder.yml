@@ -8,16 +8,22 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Безопасный preview/validate или ежемесячная отправка'
+        description: 'preview/validate без доставки, адресный test или общая ежемесячная отправка'
         required: true
         default: preview
         type: choice
         options:
           - preview
           - validate
+          - test
           - scheduled
+      employee:
+        description: 'Только для test: сотрудник в формате emp-006. Не ограничивает общую рассылку.'
+        required: false
+        default: ''
+        type: string
       date:
-        description: 'Тестовая дата для preview/validate; scheduled использует только сегодня'
+        description: 'Тестовая дата для preview/validate/test; scheduled использует только сегодня'
         required: false
         default: ''
         type: string
@@ -37,6 +43,7 @@ jobs:
       FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
       JOURNAL_MODE: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.mode }}
       JOURNAL_DATE: ${{ github.event_name == 'workflow_dispatch' && inputs.date || '' }}
+      JOURNAL_EMPLOYEE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'test' && inputs.employee || '' }}
     steps:
       - name: Checkout public automation
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
