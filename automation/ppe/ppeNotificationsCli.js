@@ -3,11 +3,10 @@ import { resolve } from 'node:path'
 import { cert, deleteApp, initializeApp } from 'firebase-admin/app'
 import { getFirestore } from 'firebase-admin/firestore'
 import { getMessaging } from 'firebase-admin/messaging'
-import { dateKeyInTimeZone } from './ppeNotifications.js'
+import { resolveNotificationDate } from './notificationDate.js'
 import { runPpeNotifications } from './runPpeNotifications.js'
 
 const EXPECTED_PROJECT_ID = 'gazenergoexam'
-const TIME_ZONE = 'Asia/Yekaterinburg'
 const args = process.argv.slice(2)
 
 function option(name) {
@@ -30,15 +29,11 @@ async function serviceAccount() {
 const delivery = option('--mode') || String(process.env.PPE_MODE || 'preview').trim()
 const employeeId = option('--employee') || String(process.env.PPE_EMPLOYEE || '').trim()
 const requestedDate = option('--date') || String(process.env.PPE_DATE || '').trim()
-const dateKey = requestedDate || dateKeyInTimeZone(new Date(), TIME_ZONE)
+const dateKey = resolveNotificationDate({ delivery, requestedDate })
 
 if (!['preview', 'validate', 'test', 'scheduled'].includes(delivery)) {
   throw new Error('Mode must be preview, validate, test or scheduled.')
 }
-if (!/^\d{4}-\d{2}-\d{2}$/.test(dateKey)) {
-  throw new Error('Date must use the YYYY-MM-DD format.')
-}
-
 const account = await serviceAccount()
 if (account.project_id !== EXPECTED_PROJECT_ID) {
   throw new Error(`Firebase key belongs to another project: ${account.project_id || 'unknown'}.`)
@@ -66,6 +61,8 @@ try {
     title: result.notification?.title || '',
     body: result.notification?.body || '',
   }, null, 2))
+  // GitHub должен показать ошибку рассылки, чтобы она была заметна владельцу.
+  if (['failed', 'partial'].includes(result.status)) process.exitCode = 1
 } finally {
   await deleteApp(app)
 }

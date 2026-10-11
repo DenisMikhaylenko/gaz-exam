@@ -2,10 +2,9 @@ name: PPE notifications OVB-1
 
 on:
   schedule:
-    - cron: '17 8 * * *'
-      timezone: 'Asia/Yekaterinburg'
-    - cron: '17 9 * * *'
-      timezone: 'Asia/Yekaterinburg'
+    # Explicit UTC: 08:17–18:17 Asia/Yekaterinburg (UTC+5), hourly recovery.
+    # Firestore's daily marker suppresses delivery after a successful attempt.
+    - cron: '17 3-13 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -24,7 +23,7 @@ on:
         default: emp-006
         type: string
       date:
-        description: 'Тестовая дата YYYY-MM-DD; пусто = сегодня'
+        description: 'Дата для preview/validate/test; scheduled использует только сегодня'
         required: false
         type: string
 
@@ -42,18 +41,18 @@ jobs:
     env:
       FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
       PPE_MODE: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.mode }}
-      PPE_EMPLOYEE: ${{ inputs.employee || '' }}
-      PPE_DATE: ${{ inputs.date || '' }}
+      PPE_EMPLOYEE: ${{ github.event_name == 'workflow_dispatch' && inputs.employee || '' }}
+      PPE_DATE: ${{ github.event_name == 'workflow_dispatch' && inputs.date || '' }}
     steps:
       - name: Checkout public automation
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Use Node.js 22
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: automation/ppe/package.json
+          cache-dependency-path: automation/ppe/package-lock.json
 
       - name: Check Firebase secret
         shell: bash
@@ -64,7 +63,7 @@ jobs:
           fi
 
       - name: Install notification runtime
-        run: npm install --prefix automation/ppe --ignore-scripts --no-audit --no-fund
+        run: npm ci --prefix automation/ppe --ignore-scripts --no-audit --no-fund
 
       - name: Run PPE notification job
         run: node automation/ppe/ppeNotificationsCli.js

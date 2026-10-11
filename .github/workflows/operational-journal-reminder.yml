@@ -1,0 +1,64 @@
+name: Operational journal reminder
+
+on:
+  schedule:
+    # Explicit UTC: 08:23–18:23 Asia/Yekaterinburg on the 2nd, hourly recovery.
+    # One monthly Firestore marker prevents repeating a successful broadcast.
+    - cron: '23 3-13 2 * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Безопасный preview/validate или ежемесячная отправка'
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - validate
+          - scheduled
+      date:
+        description: 'Тестовая дата для preview/validate; scheduled использует только сегодня'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: operational-journal-reminder
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+      JOURNAL_MODE: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.mode }}
+      JOURNAL_DATE: ${{ github.event_name == 'workflow_dispatch' && inputs.date || '' }}
+    steps:
+      - name: Checkout public automation
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: automation/ppe/package-lock.json
+
+      - name: Check Firebase secret
+        if: env.JOURNAL_MODE != 'preview'
+        shell: bash
+        run: |
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT_JSON" ]; then
+            echo "FIREBASE_SERVICE_ACCOUNT_JSON is not configured" >&2
+            exit 1
+          fi
+
+      - name: Install notification runtime
+        run: npm ci --prefix automation/ppe --ignore-scripts --no-audit --no-fund
+
+      - name: Run operational journal reminder
+        run: node automation/ppe/operationalJournalCli.js

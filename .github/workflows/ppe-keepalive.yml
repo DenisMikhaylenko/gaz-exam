@@ -2,8 +2,8 @@ name: Keep PPE schedule active
 
 on:
   schedule:
-    - cron: '31 7 1 * *'
-      timezone: 'Asia/Yekaterinburg'
+    # 07:31 Asia/Yekaterinburg; a second day allows recovery from a missed run.
+    - cron: '31 2 1,15 * *'
   workflow_dispatch:
 
 permissions:
@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout public repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Record monthly heartbeat
         shell: bash
