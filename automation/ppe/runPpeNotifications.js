@@ -171,6 +171,9 @@ export async function runPpeNotifications({
   }
 
   const tracksDailyRun = delivery === 'scheduled'
+  // A department-wide daily marker must never be consumed by an employee test filter.
+  // workflow_dispatch can supply its default employee even when the caller sends ''.
+  const recipientEmployeeId = tracksDailyRun ? '' : employeeId
   const run = tracksDailyRun ? await acquireDailyRun(db, dateKey, source) : null
   if (run && !run.acquired) {
     logger.info?.('PPE notification run already completed or is still running', { dateKey })
@@ -203,7 +206,7 @@ export async function runPpeNotifications({
     const alerts = collectPpeAlerts(items, dateKey)
     const notification = buildPpeNotification(alerts, dateKey)
     const menuAlertDueDates = collectPpeMenuAlertDueDates(items, DEPARTMENT)
-    const eligibleFids = collectEligiblePpeFids(devices, users, employeeId)
+    const eligibleFids = collectEligiblePpeFids(devices, users, recipientEmployeeId)
     const completedFids = new Set(run?.completedFids || [])
     const fids = tracksDailyRun
       ? pendingPpeFids(eligibleFids, completedFids)
