@@ -7,7 +7,7 @@ const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/
 export const OPERATIONAL_JOURNAL_TOPIC = 'app_updates'
 export const OPERATIONAL_JOURNAL_TITLE = 'Оперативный журнал'
 export const OPERATIONAL_JOURNAL_BODY =
-  'Сегодня 2-е число. Выполните ежемесячный осмотр, зафиксируйте количество переключений устройств РПН и сделайте запись в оперативном журнале.'
+  'Сегодня 2-е число. Выполните ежемесячный осмотр, зафиксируйте количество переключений устройств РПН и сделайте запись в оперативном журнале. Осмотр глубинного заземлителя на ПС-100/10 ГКС'
 export const OPERATIONAL_JOURNAL_TTL_MS = 20 * 60 * 60 * 1000
 
 export function validDateKey(dateKey) {
