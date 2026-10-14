@@ -48,10 +48,10 @@ export function dateKeyInTimeZone(now = new Date(), timeZone = 'Asia/Yekaterinbu
 }
 
 export function notificationStage(days) {
+  // Push starts at 3 days; the independent in-app indicators still start at 14.
+  if (!Number.isInteger(days)) return null
   if (days < 0) return 'overdue'
   if (days <= 3) return 'urgent'
-  if (days <= 7) return 'warning'
-  if (days <= 14) return 'info'
   return null
 }
 
@@ -87,8 +87,6 @@ function itemAlertAcknowledged(item) {
 function alertMessage(alert) {
   const { controlKind, days, subject } = alert
   const noun = CONTROL_CONFIG[controlKind].noun
-  if (days === 14) return `${subject}: до ${noun} осталось 14 дней.`
-  if (days === 7) return `${subject}: до ${noun} осталось 7 дней.`
   if (days > 0) {
     const action = controlKind === 'test' ? 'Пора готовить к сдаче' : 'Пора записать на осмотр'
     return `${action}: ${subject}. Осталось ${days} ${dayWord(days)}.`
@@ -126,7 +124,7 @@ export function collectPpeAlerts(items, today) {
     }
   }
 
-  const rank = { overdue: 0, urgent: 1, warning: 2, info: 3 }
+  const rank = { overdue: 0, urgent: 1 }
   return alerts.sort((left, right) =>
     rank[left.stage] - rank[right.stage]
     || left.days - right.days
