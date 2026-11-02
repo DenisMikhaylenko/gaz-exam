@@ -1,4 +1,4 @@
-name: PPE notifications OVB-1
+name: PPE notifications by department
 
 on:
   schedule:
@@ -7,6 +7,15 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch:
     inputs:
+      department:
+        description: 'Подразделение для ручной проверки'
+        required: true
+        default: ovb1
+        type: choice
+        options:
+          - ovb1
+          - ovb2
+          - petl
       mode:
         description: 'Безопасный режим проверки или адресной отправки'
         required: true
@@ -28,7 +37,7 @@ on:
         type: string
 
 concurrency:
-  group: ppe-notifications-ovb1
+  group: ppe-notifications
   cancel-in-progress: false
 
 permissions:
@@ -36,9 +45,14 @@ permissions:
 
 jobs:
   notify:
+    strategy:
+      fail-fast: false
+      matrix:
+        department: ${{ github.event_name == 'schedule' && fromJSON('["ovb1","ovb2","petl"]') || fromJSON(format('["{0}"]', inputs.department)) }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
+      PPE_DEPARTMENT: ${{ matrix.department }}
       FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
       PPE_MODE: ${{ github.event_name == 'schedule' && 'scheduled' || inputs.mode }}
       PPE_EMPLOYEE: ${{ github.event_name == 'workflow_dispatch' && inputs.mode != 'scheduled' && inputs.employee || '' }}

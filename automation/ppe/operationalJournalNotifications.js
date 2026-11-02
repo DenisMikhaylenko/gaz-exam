@@ -2,9 +2,6 @@ import { notificationTtlForDate } from './notificationDate.js'
 
 const DATE_RE = /^(\d{4})-(\d{2})-(\d{2})$/
 
-// APK 0.8.6 already subscribes to app_updates, but not to operational_journal_reminders.
-// Use exactly one common topic (not both) so old APKs receive this reminder too.
-export const OPERATIONAL_JOURNAL_TOPIC = 'app_updates'
 export const OPERATIONAL_JOURNAL_TITLE = 'Оперативный журнал'
 export const OPERATIONAL_JOURNAL_BODY =
   'Сегодня 2-е число. Выполните ежемесячный осмотр, зафиксируйте количество переключений устройств РПН и сделайте запись в оперативном журнале. Осмотр глубинного заземлителя на ПС-100/10 ГКС'
@@ -34,13 +31,13 @@ export function operationalJournalRunKey(dateKey) {
 export function operationalJournalMessage(dateKey) {
   const runKey = operationalJournalRunKey(dateKey)
   return {
-    topic: OPERATIONAL_JOURNAL_TOPIC,
     notification: {
       title: OPERATIONAL_JOURNAL_TITLE,
       body: OPERATIONAL_JOURNAL_BODY,
     },
     data: {
       kind: 'operational-journal',
+      department: 'ovb1',
       date: dateKey,
       title: OPERATIONAL_JOURNAL_TITLE,
       body: OPERATIONAL_JOURNAL_BODY,

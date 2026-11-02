@@ -1,3 +1,5 @@
+import { notificationDepartmentLabel } from './notificationDepartments.js'
+
 const DAY_MS = 24 * 60 * 60 * 1000
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
@@ -95,7 +97,7 @@ function alertMessage(alert) {
   return `${subject}: ${CONTROL_CONFIG[controlKind].overdue} на ${Math.abs(days)} ${dayWord(days)}.`
 }
 
-export function collectPpeAlerts(items, today) {
+export function collectPpeAlerts(items, today, department = 'ovb1') {
   if (dateNumber(today) === null || !Array.isArray(items)) return []
   const alerts = []
 
@@ -103,7 +105,7 @@ export function collectPpeAlerts(items, today) {
     if (!item || item.status === 'decommissioned') continue
     // Старые документы без department относятся к ОВБ-1. Документы других
     // подразделений никогда не должны попадать в рассылку ОВБ-1.
-    if (item.department && item.department !== 'ovb1') continue
+    if ((item.department || 'ovb1') !== department) continue
     if (itemAlertAcknowledged(item)) continue
     for (const [controlKind, config] of Object.entries(CONTROL_CONFIG)) {
       if (item[config.requiredField] !== true) continue
@@ -175,10 +177,10 @@ export function countPpeItemsInAlerts(alerts) {
   })).size
 }
 
-export function buildPpeNotification(alerts, today) {
+export function buildPpeNotification(alerts, today, department = 'ovb1') {
   if (!Array.isArray(alerts) || alerts.length === 0) return null
   const primary = alerts[0]
-  const title = 'СИЗ ОВБ-1'
+  const title = `СИЗ ${notificationDepartmentLabel(department)}`
   const itemCount = countPpeItemsInAlerts(alerts)
   const suffix = ppeSuffix(itemCount - 1)
   const body = shorten(`${primary.message}${suffix}`, 260)
@@ -187,6 +189,7 @@ export function buildPpeNotification(alerts, today) {
     body,
     data: {
       kind: 'ppe',
+      department,
       route: 'ppe',
       title,
       body,
@@ -197,27 +200,24 @@ export function buildPpeNotification(alerts, today) {
   }
 }
 
-export function collectEligiblePpeFids(devices, users, employeeId = '') {
+export function collectEligiblePpeFids(devices, users, employeeId = '', department = 'ovb1', installations = []) {
+  notificationDepartmentLabel(department)
   if (!Array.isArray(devices) || !Array.isArray(users)) return []
   const requiredEmployeeId = String(employeeId || '').trim()
-  const allowedUids = new Set(users.flatMap((user) =>
-    user?.id
-      && user.department === 'ovb1'
-      && user.active === true
-      && user.canUsePpe === true
-      ? [String(user.id)]
-      : [],
-  ))
-  return [...new Set(devices.flatMap((device) => {
-    const installationId = String(device?.installationId || '')
-    const documentId = String(device?.id || '')
-    if (requiredEmployeeId && device?.employeeId !== requiredEmployeeId) return []
-    return device?.active === true
-      && device?.department === 'ovb1'
-      && allowedUids.has(String(device?.ownerUid || ''))
-      && installationId
-      && installationId === documentId
-      ? [installationId]
-      : []
+  const profiles = new Map(users.filter(user => user?.id && user.department === department
+    && user.active === true && user.canUsePpe === true).map(user => [String(user.id), user]))
+  const bindings = new Map(installations.map(binding => [binding.id, binding]))
+  return [...new Set(devices.flatMap(device => {
+    const fid = String(device?.installationId || '')
+    const user = profiles.get(String(device?.ownerUid || ''))
+    if (!user || device.active !== true || device.department !== department || !fid || fid !== device.id) return []
+    if (requiredEmployeeId && device.employeeId !== requiredEmployeeId) return []
+    if (user.employeeId && device.employeeId !== user.employeeId) return []
+    const binding = bindings.get(fid)
+    // Only legacy OVB-1 installations may predate the ownership registry.
+    if (!binding) return department === 'ovb1' ? [fid] : []
+    return binding.active === true && binding.department === department
+      && binding.installationId === fid && binding.ownerUid === device.ownerUid
+      && binding.employeeId === device.employeeId ? [fid] : []
   }))]
 }

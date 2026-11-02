@@ -8,7 +8,7 @@ import {
   daysUntilDate,
 } from './ppeNotifications.js'
 
-const DEPARTMENT = 'ovb1'
+import { loadDepartmentPpeData, notificationDepartmentLabel } from './notificationDepartments.js'
 const MAX_MULTICAST_SIZE = 500
 const RUN_STALE_AFTER_MS = 30 * 60 * 1000
 export const PPE_NOTIFICATION_TTL_MS = 18 * 60 * 60 * 1000
@@ -32,33 +32,14 @@ function timestampMillis(value) {
   return Number.isFinite(parsed) ? parsed : 0
 }
 
-function recordTime(record) {
-  return timestampMillis(record?.updatedAt)
-}
-
-function mergeSnapshots(snapshots) {
-  const records = new Map()
-  for (const snapshot of snapshots) {
-    for (const document of snapshot.docs) {
-      if (document.data()?.placeholder === true) continue
-      const record = { ...document.data(), id: document.id }
-      const previous = records.get(document.id)
-      if (!previous || recordTime(record) >= recordTime(previous)) {
-        records.set(document.id, record)
-      }
-    }
-  }
-  return [...records.values()]
-}
-
-async function acquireDailyRun(db, dateKey, source) {
-  const legacyRef = db.collection('ppeNotificationRuns').doc(dateKey)
-  const ref = db.collection('ppeDepartments').doc(DEPARTMENT)
+async function acquireDailyRun(db, dateKey, source, department) {
+  const legacyRef = department === 'ovb1' ? db.collection('ppeNotificationRuns').doc(dateKey) : null
+  const ref = db.collection('ppeDepartments').doc(department)
     .collection('notificationRuns').doc(dateKey)
   const result = await db.runTransaction(async (transaction) => {
     const [snapshot, legacySnapshot] = await Promise.all([
       transaction.get(ref),
-      transaction.get(legacyRef),
+      legacyRef ? transaction.get(legacyRef) : { exists: false },
     ])
     const existing = [snapshot, legacySnapshot]
       .filter((entry) => entry.exists)
@@ -79,7 +60,7 @@ async function acquireDailyRun(db, dateKey, source) {
     const data = {
       status: 'running',
       source,
-      department: DEPARTMENT,
+      department: department,
       dateKey,
       startedAt: FieldValue.serverTimestamp(),
       finishedAt: FieldValue.delete(),
@@ -87,7 +68,7 @@ async function acquireDailyRun(db, dateKey, source) {
       attemptCount: FieldValue.increment(1),
     }
     transaction.set(ref, data, { merge: true })
-    transaction.set(legacyRef, data, { merge: true })
+    if (legacyRef) transaction.set(legacyRef, data, { merge: true })
     return { acquired: true, completedFids }
   })
   return { ...result, ref, legacyRef }
@@ -97,7 +78,7 @@ async function updateDailyRun(db, run, data) {
   if (!run) return
   const batch = db.batch()
   batch.set(run.ref, data, { merge: true })
-  batch.set(run.legacyRef, data, { merge: true })
+  if (run.legacyRef) batch.set(run.legacyRef, data, { merge: true })
   await batch.commit()
 }
 
@@ -119,43 +100,48 @@ export function ppeDeliveryStatus({
   return retryableFailureCount > 0 ? 'partial' : 'sent'
 }
 
-export function messageFor(notification, fids, dateKey) {
-  const dailyKey = `ppe-${DEPARTMENT}-${dateKey}`
+export function messageFor(notification, fids, dateKey, department = notification.data?.department || 'ovb1') {
+  const dailyKey = `ppe-${department}-${dateKey}`
+  // ПЭТЛ принимает сообщение через onMessageReceived и повторно проверяет
+  // подразделение на телефоне. notification-payload обходил бы эту проверку
+  // в фоне, если сотрудник сменил подразделение, пока сообщение было в очереди.
+  const checkedOnDevice = department === 'petl'
   return {
     fids,
-    notification: {
+    ...(!checkedOnDevice && { notification: {
       title: notification.title,
       body: notification.body,
-    },
+    } }),
     data: notification.data,
     android: {
       priority: 'high',
       collapseKey: dailyKey,
       ttl: notificationTtlForDate(dateKey, PPE_NOTIFICATION_TTL_MS),
-      notification: {
+      ...(!checkedOnDevice && { notification: {
         channelId: 'ppe_alerts',
         icon: 'ic_notification_update',
         color: '#0BA77B',
         sound: 'default',
         tag: dailyKey,
-      },
+      } }),
     },
   }
 }
 
 /**
- * Runs the OVB-1 PPE notification job.
+ * Runs one department’s PPE notification job.
  *
  * delivery:
  * - preview: calculate only;
  * - validate: ask Firebase to validate one employee payload without delivery;
  * - test: deliver to one employee without creating the daily run marker;
- * - scheduled: deliver to every eligible OVB-1 installation once per date.
+ * - scheduled: deliver to every eligible installation of this department once per date.
  */
 export async function runPpeNotifications({
   db,
   messaging,
   dateKey,
+  department = 'ovb1',
   delivery = 'preview',
   employeeId = '',
   source = 'manual',
@@ -170,43 +156,27 @@ export async function runPpeNotifications({
     throw new Error('For an address test, specify one employee in the emp-001 format.')
   }
 
+  notificationDepartmentLabel(department)
+  const records = await loadDepartmentPpeData(db, department)
+  if (!records.enabled) return { status: 'disabled', dateKey, department, delivery }
+
   const tracksDailyRun = delivery === 'scheduled'
   // A department-wide daily marker must never be consumed by an employee test filter.
   // workflow_dispatch can supply its default employee even when the caller sends ''.
   const recipientEmployeeId = tracksDailyRun ? '' : employeeId
-  const run = tracksDailyRun ? await acquireDailyRun(db, dateKey, source) : null
+  const run = tracksDailyRun ? await acquireDailyRun(db, dateKey, source, department) : null
   if (run && !run.acquired) {
     logger.info?.('PPE notification run already completed or is still running', { dateKey })
     return { status: 'duplicate', dateKey }
   }
 
   try {
-    const departmentRef = db.collection('ppeDepartments').doc(DEPARTMENT)
-    const [
-      legacyItemsSnapshot,
-      itemsSnapshot,
-      legacyUsersSnapshot,
-      usersSnapshot,
-      legacyDevicesSnapshot,
-      devicesSnapshot,
-    ] = await Promise.all([
-      db.collection('ppeItems').get(),
-      departmentRef.collection('items').get(),
-      db.collection('users').where('department', '==', DEPARTMENT).get(),
-      departmentRef.collection('users').get(),
-      db.collection('ppePushDevices').where('active', '==', true).get(),
-      departmentRef.collection('devices').where('active', '==', true).get(),
-    ])
-    const items = mergeSnapshots([legacyItemsSnapshot, itemsSnapshot])
-      .filter((item) => (item.department || DEPARTMENT) === DEPARTMENT)
-    const users = mergeSnapshots([legacyUsersSnapshot, usersSnapshot])
-      .filter((user) => user.department === DEPARTMENT)
-    const devices = mergeSnapshots([legacyDevicesSnapshot, devicesSnapshot])
-      .filter((device) => device.department === DEPARTMENT && device.active === true)
-    const alerts = collectPpeAlerts(items, dateKey)
-    const notification = buildPpeNotification(alerts, dateKey)
-    const menuAlertDueDates = collectPpeMenuAlertDueDates(items, DEPARTMENT)
-    const eligibleFids = collectEligiblePpeFids(devices, users, recipientEmployeeId)
+    const departmentRef = db.collection('ppeDepartments').doc(department)
+    const { items, users, devices, installations } = records
+    const alerts = collectPpeAlerts(items, dateKey, department)
+    const notification = buildPpeNotification(alerts, dateKey, department)
+    const menuAlertDueDates = collectPpeMenuAlertDueDates(items, department)
+    const eligibleFids = collectEligiblePpeFids(devices, users, recipientEmployeeId, department, installations)
     const completedFids = new Set(run?.completedFids || [])
     const fids = tracksDailyRun
       ? pendingPpeFids(eligibleFids, completedFids)
@@ -214,6 +184,7 @@ export async function runPpeNotifications({
 
     const summary = {
       status: delivery === 'preview' ? 'preview' : 'ready',
+      department,
       dateKey,
       delivery,
       itemCount: items.length,
@@ -225,9 +196,9 @@ export async function runPpeNotifications({
     if (delivery === 'preview') return summary
 
     if (tracksDailyRun) {
-      await db.collection('ppePublicAlerts').doc(DEPARTMENT).set({
+      await db.collection('ppePublicAlerts').doc(department).set({
         schemaVersion: 1,
-        department: DEPARTMENT,
+        department: department,
         dueDates: menuAlertDueDates,
         updatedAt: FieldValue.serverTimestamp(),
       })
@@ -236,8 +207,8 @@ export async function runPpeNotifications({
     if (!notification || eligibleFids.length === 0 || fids.length === 0) {
       if (['validate', 'test'].includes(delivery) && eligibleFids.length === 0) {
         throw new Error(
-          `${employeeId} is not an active OVB-1 PPE recipient: `
-          + 'department=ovb1, active=true, canUsePpe=true and a registered APK are required.',
+          `${employeeId} is not an active ${department} PPE recipient: `
+          + 'an enabled profile and a registered APK bound to this department are required.',
         )
       }
       const status = ppeDeliveryStatus({
@@ -295,7 +266,7 @@ export async function runPpeNotifications({
             disabledAt: FieldValue.serverTimestamp(),
             disabledReason: 'firebase-installation-not-registered',
           }
-          cleanup.set(db.collection('ppePushDevices').doc(fid), data, { merge: true })
+          if (department === 'ovb1') cleanup.set(db.collection('ppePushDevices').doc(fid), data, { merge: true })
           cleanup.set(departmentRef.collection('devices').doc(fid), data, { merge: true })
         }
         await cleanup.commit()

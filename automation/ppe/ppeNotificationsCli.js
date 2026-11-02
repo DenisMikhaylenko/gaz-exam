@@ -26,6 +26,7 @@ async function serviceAccount() {
   return JSON.parse(await readFile(resolve(configuredPath), 'utf8'))
 }
 
+const department = option('--department') || String(process.env.PPE_DEPARTMENT || 'ovb1').trim()
 const delivery = option('--mode') || String(process.env.PPE_MODE || 'preview').trim()
 const employeeId = option('--employee') || String(process.env.PPE_EMPLOYEE || '').trim()
 const requestedDate = option('--date') || String(process.env.PPE_DATE || '').trim()
@@ -45,12 +46,14 @@ try {
     db: getFirestore(app),
     messaging: getMessaging(app),
     dateKey,
+    department,
     delivery,
     employeeId,
     source: process.env.GITHUB_ACTIONS === 'true' ? 'github-actions' : 'local-cli',
   })
   console.log(JSON.stringify({
     status: result.status,
+    department,
     date: result.dateKey,
     mode: result.delivery || delivery,
     items: result.itemCount ?? 0,
