@@ -1,6 +1,6 @@
 import { FieldValue } from 'firebase-admin/firestore'
 import { operationalJournalMessage, operationalJournalRunKey } from './operationalJournalNotifications.js'
-import { loadDepartmentPpeData } from './notificationDepartments.js'
+import { departmentDeliveryBatches, loadDepartmentPpeData, withDepartmentDelivery } from './notificationDepartments.js'
 import { collectEligiblePpeFids } from './ppeNotifications.js'
 
 const RUN_STALE_AFTER_MS = 30 * 60 * 1000
@@ -61,9 +61,8 @@ export async function runOperationalJournalReminder({
   const pending = fids.filter(fid => !completed.has(fid))
   let successCount = 0, failureCount = 0, retryableFailureCount = 0
   try {
-    for (let offset = 0; offset < pending.length; offset += 500) {
-      const batch = pending.slice(offset, offset + 500)
-      const response = await messaging.sendEachForMulticast({ ...message, fids: batch }, delivery === 'validate')
+    for (const { fids: batch, guarded } of departmentDeliveryBatches(pending, data.devices, data.installations, department)) {
+      const response = await messaging.sendEachForMulticast(withDepartmentDelivery({ ...message, fids: batch }, guarded), delivery === 'validate')
       successCount += response.successCount
       failureCount += response.failureCount
       response.responses.forEach((result, index) => {

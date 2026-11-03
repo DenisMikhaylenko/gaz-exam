@@ -58,3 +58,28 @@ export async function loadDepartmentPpeData(db, department) {
     installations,
   }
 }
+// APKs advertising birthdays also include PushDepartmentPolicy. Send their
+// work reminders as data-only so Android rechecks the recipient after delivery,
+// including messages queued before the user switched departments. Legacy APKs
+// keep the notification payload they already support.
+export function departmentDeliveryBatches(fids, devices, installations, department) {
+  const capable = new Set([...devices, ...installations]
+    .filter(device => device.birthdayNotificationsVersion === 1)
+    .map(device => device.installationId))
+  const groups = [false, true].map(guarded => ({ guarded, fids: fids.filter(fid =>
+    (department !== 'ovb1' || capable.has(fid)) === guarded) }))
+  return groups.flatMap(group => {
+    const batches = []
+    for (let offset = 0; offset < group.fids.length; offset += 500) {
+      batches.push({ guarded: group.guarded, fids: group.fids.slice(offset, offset + 500) })
+    }
+    return batches
+  })
+}
+
+export function withDepartmentDelivery(message, guarded) {
+  if (!guarded) return message
+  const { notification: _notification, android, ...rest } = message
+  const { notification: _androidNotification, ...androidData } = android || {}
+  return { ...rest, android: androidData }
+}

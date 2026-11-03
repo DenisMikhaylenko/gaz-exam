@@ -8,7 +8,7 @@ import {
   daysUntilDate,
 } from './ppeNotifications.js'
 
-import { loadDepartmentPpeData, notificationDepartmentLabel } from './notificationDepartments.js'
+import { departmentDeliveryBatches, loadDepartmentPpeData, notificationDepartmentLabel, withDepartmentDelivery } from './notificationDepartments.js'
 const MAX_MULTICAST_SIZE = 500
 const RUN_STALE_AFTER_MS = 30 * 60 * 1000
 export const PPE_NOTIFICATION_TTL_MS = 18 * 60 * 60 * 1000
@@ -231,9 +231,9 @@ export async function runPpeNotifications({
     let successCount = 0
     let failureCount = 0
     const invalidFids = []
-    for (const batchFids of chunks(fids, MAX_MULTICAST_SIZE)) {
+    for (const { fids: batchFids, guarded } of departmentDeliveryBatches(fids, devices, installations, department)) {
       const response = await messaging.sendEachForMulticast(
-        messageFor(notification, batchFids, dateKey),
+        withDepartmentDelivery(messageFor(notification, batchFids, dateKey), guarded),
         delivery === 'validate',
       )
       successCount += response.successCount
