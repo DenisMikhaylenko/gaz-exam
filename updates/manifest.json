@@ -245,13 +245,223 @@
         "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-instruction-191.pdf?v=83159b079101837d",
         "sha256": "83159b079101837df56bff5c938f836907cf908ede5d762248f19e4420dd5178",
         "bytes": 3767012
+      },
+      {
+        "id": "petl-vvi-01",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-01.pdf?v=7ed2bd9130b56366",
+        "sha256": "7ed2bd9130b5636604a2d9aaf61206a825785f9b047be29d71c2fede1f514ef4",
+        "bytes": 340304
+      },
+      {
+        "id": "petl-vvi-02",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-02.pdf?v=5435d61b8aff0472",
+        "sha256": "5435d61b8aff0472291e760df9fe14edf3dce014a97ce3650bc37ef5cd21cb64",
+        "bytes": 314761
+      },
+      {
+        "id": "petl-vvi-03",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-03.pdf?v=972517652b3eba38",
+        "sha256": "972517652b3eba38a2567d888b9568a3d7fe380341f82bc50d3fb792ac6753c4",
+        "bytes": 926288
+      },
+      {
+        "id": "petl-vvi-04",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-04.pdf?v=491496f6f8730186",
+        "sha256": "491496f6f87301867943c523a861242c6f2fd466f5f46763ae95fa82b2535671",
+        "bytes": 465956
+      },
+      {
+        "id": "petl-vvi-05",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-05.pdf?v=6be621db3398d430",
+        "sha256": "6be621db3398d4306b821f9771ac87580cdd676bd10ebca053a9f6c7fc9e0e47",
+        "bytes": 328582
+      },
+      {
+        "id": "petl-vvi-06",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-06.pdf?v=1a32697f7b9d40d1",
+        "sha256": "1a32697f7b9d40d117433172922f7ba3c8b2671c6424c36d1190fbb5e8b59b5d",
+        "bytes": 433477
+      },
+      {
+        "id": "petl-vvi-07",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-07.pdf?v=9f3433b61a69852a",
+        "sha256": "9f3433b61a69852ac0083f9cea8e438782f0340029be62080511634ee3685464",
+        "bytes": 389471
+      },
+      {
+        "id": "petl-vvi-08",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-08.pdf?v=fea9a36379609ced",
+        "sha256": "fea9a36379609ced8eb8f43c8cc60d3bb0f098558e82288b6c942f55f939cf65",
+        "bytes": 384483
+      },
+      {
+        "id": "petl-vvi-09",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-09.pdf?v=3fb702d311eb00d3",
+        "sha256": "3fb702d311eb00d32852943503ac2f242b77e0dc10498f6aaf6fbad605c060b9",
+        "bytes": 353718
+      },
+      {
+        "id": "petl-vvi-10",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-10.pdf?v=d0775441ceedaeb9",
+        "sha256": "d0775441ceedaeb9930ecf169726ebb78c23b151870b4f11bbf72a57afd63a96",
+        "bytes": 375855
+      },
+      {
+        "id": "petl-vvi-11",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-11.pdf?v=5633ad009e6e8dfb",
+        "sha256": "5633ad009e6e8dfbfd25ccab3d5d6c812bb5473be383848c9287a289553cd39a",
+        "bytes": 337831
+      },
+      {
+        "id": "petl-vvi-12",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-12.pdf?v=673c11d0b9352d8b",
+        "sha256": "673c11d0b9352d8bd61350198035fdb54059b65ca86a360b4667d2a011ed6133",
+        "bytes": 313784
+      },
+      {
+        "id": "petl-vvi-13",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-13.pdf?v=6cd32924a3668956",
+        "sha256": "6cd32924a366895680f07ad4afc5c148a10432aa2550b67b4b99149715896658",
+        "bytes": 455970
+      },
+      {
+        "id": "petl-vvi-14",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-14.pdf?v=3e83d6608e436f07",
+        "sha256": "3e83d6608e436f072fb137da11307caf5eb1a077d1183bbb071fdd7d5d388b90",
+        "bytes": 509930
+      },
+      {
+        "id": "petl-vvi-15",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-15.pdf?v=a5d043836a64dc36",
+        "sha256": "a5d043836a64dc36643657b159e2f48440512adda002a64e87ab8c1617dd411a",
+        "bytes": 524454
+      },
+      {
+        "id": "petl-vvi-16",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-16.pdf?v=d3b18030f4a9f795",
+        "sha256": "d3b18030f4a9f795d0c8a1564e3ede164dcd8f97f9dd0b4ce6183591d9d55987",
+        "bytes": 306359
+      },
+      {
+        "id": "petl-vvi-17",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-17.pdf?v=dfd9f20bbc5ecb30",
+        "sha256": "dfd9f20bbc5ecb302773a03520d51b62b288ff8c6f87e0a64d65d1efded71e42",
+        "bytes": 488579
+      },
+      {
+        "id": "petl-vvi-18",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-18.pdf?v=db0fe6468416efa1",
+        "sha256": "db0fe6468416efa1559882ec4bce796121691e92103e3212a4b3e0d7e7fa65c6",
+        "bytes": 379363
+      },
+      {
+        "id": "petl-vvi-19",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-19.pdf?v=8624edf32a20ed22",
+        "sha256": "8624edf32a20ed22c2c51ce02dc4d510249d72dc44c24a34476bca3663d65266",
+        "bytes": 568047
+      },
+      {
+        "id": "petl-vvi-20",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-20.pdf?v=9d1b0015a1df4ea6",
+        "sha256": "9d1b0015a1df4ea687dcbb0794764e43a517264c3c655e416ea34887e7cfc0e2",
+        "bytes": 466063
+      },
+      {
+        "id": "petl-vvi-21",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-21.pdf?v=f4c2da153e6923db",
+        "sha256": "f4c2da153e6923db90493ee0164a36bbe984082ce662204abd9903472cf9e408",
+        "bytes": 522329
+      },
+      {
+        "id": "petl-vvi-22",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-22.pdf?v=3631c1974870669c",
+        "sha256": "3631c1974870669c30a17da500588741a392e37ef3c27860aaa2fe8e90d45cc8",
+        "bytes": 307304
+      },
+      {
+        "id": "petl-vvi-23",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-23.pdf?v=bf699fa0f4e2efc1",
+        "sha256": "bf699fa0f4e2efc11c6440f45c66e73f32ddb6430557653ca034cb1fd721788a",
+        "bytes": 305002
+      },
+      {
+        "id": "petl-vvi-24",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-24.pdf?v=3491f28d2d730baf",
+        "sha256": "3491f28d2d730bafcdae9285a1aacc5a8a56b8070e62d404fa874120108ab1b5",
+        "bytes": 292217
+      },
+      {
+        "id": "petl-vvi-25",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-25.pdf?v=00bff188f0a67562",
+        "sha256": "00bff188f0a675629e560c21acadb2dd1773a957d3530fc288baf2b7658da180",
+        "bytes": 897557
+      },
+      {
+        "id": "petl-vvi-26",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-26.pdf?v=1abe575597a6e1f0",
+        "sha256": "1abe575597a6e1f00f5fa0830ee8984edf4b0972a6795ba38520846043464833",
+        "bytes": 502935
+      },
+      {
+        "id": "petl-vvi-27",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-27.pdf?v=14d75c25cea0333a",
+        "sha256": "14d75c25cea0333ab7a77f163415652a89352f0d11e9787618757611d70d23cf",
+        "bytes": 533414
+      },
+      {
+        "id": "petl-vvi-28",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-28.pdf?v=a47ad342770e0a54",
+        "sha256": "a47ad342770e0a54dd5a09942b705bf328bff039d36845eab06584d0fdb05107",
+        "bytes": 250009
+      },
+      {
+        "id": "petl-vvi-29",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-29.pdf?v=e754a117d120f14b",
+        "sha256": "e754a117d120f14b902882043c2439c4577c89bb4948a48e4f3d51142a8190f7",
+        "bytes": 519786
+      },
+      {
+        "id": "petl-vvi-tvk",
+        "department": "petl",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/files/pdf/petl-vvi-tvk.pdf?v=2fbe5ee98f071819",
+        "sha256": "2fbe5ee98f07181982234e62efc7f9a2c1fb3e09e0dd7f876f4a099fddfe16ea",
+        "bytes": 168634
       }
     ],
     "departments": {
       "petl": {
-        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/data/petl/materials.json?v=df5f56a82c5a77d8",
-        "sha256": "df5f56a82c5a77d878c70da4b9f7c19ed6109ba4044f17a55625918052304886",
-        "version": "df5f56a82c5a77d8",
+        "url": "https://raw.githubusercontent.com/DenisMikhaylenko/gaz-exam/main/data/petl/materials.json?v=09285790688e5ef3",
+        "sha256": "09285790688e5ef3d0d5d7a2aca942a40afdb10e2574661c97753b9ed6302934",
+        "version": "09285790688e5ef3",
         "appVersion": "0.9.1"
       }
     }
